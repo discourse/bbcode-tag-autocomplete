@@ -1,3 +1,4 @@
+import { getOwner } from "discourse-common/lib/get-owner";
 import { on } from "discourse-common/utils/decorators";
 import showModal from "discourse/lib/show-modal";
 import { findRawTemplate } from "discourse-common/lib/raw-templates";
@@ -6,8 +7,13 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 
 const autocompletes = [
   {
-    translatedName: "Date",
-    template: "discourse_local_dates.bbcode_autocomplete.template"
+    name: "discourse_local_dates.bbcode_autocomplete.name",
+    template: "discourse_local_dates.bbcode_autocomplete.template",
+    component: "bbcode/date"
+  },
+  {
+    name: "details.bbcode_autocomplete.name",
+    template: "details.bbcode_autocomplete.template"
   }
 ];
 
@@ -19,8 +25,6 @@ export default {
       api.modifyClass("component:d-editor", {
         @on("didInsertElement")
         _applyBbcodeTagAutocomplete() {
-          console.log("????");
-
           $(this.element.querySelector(".d-editor-input")).autocomplete({
             template: findRawTemplate("templates/bbcode-tag-autocomplete"),
 
@@ -33,14 +37,18 @@ export default {
               return this._focusTextArea();
             },
 
-            transformComplete: model => {
-              const modalController = showModal("bbcode-tag-prompt", {
-                model
-              });
+            transformComplete: (model, me) => {
+              if (model.component) {
+                const modalController = showModal("bbcode-tag-prompt", {
+                  model
+                });
 
-              return new Promise(resolve => {
-                modalController.onClosePromise = resolve;
-              });
+                return new Promise(resolve => {
+                  modalController.onClosePromise = resolve;
+                });
+              } else {
+                return I18n.t(themePrefix(model.template));
+              }
             },
 
             dataSource: term => {
@@ -52,12 +60,11 @@ export default {
               const processedAutocompletes = autocompletes.map(a => {
                 const name = a.translatedName || I18n.t(themePrefix(a.name));
                 const template = a.translatedTemplate || a.template;
-                const prompts = a.prompts || [];
 
                 return {
                   name,
                   template,
-                  prompts
+                  component: a.component
                 };
               });
 

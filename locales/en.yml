@@ -1,4 +1,14 @@
 en:
+  insert: Insert
+
+  details:
+    bbcode_autocomplete:
+      name: Hide Details
+      template: >
+        [details="Summary"]
+          This text will be hidden
+        [/details]
+
   discourse_local_dates:
     bbcode_autocomplete:
       name: Date

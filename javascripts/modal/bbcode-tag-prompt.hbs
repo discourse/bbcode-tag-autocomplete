@@ -1,3 +1,13 @@
-{{#d-modal-body rawTitle="date"}}
-  {{date-input value=this.date onChange=(action (mut this.date))}}
+{{#d-modal-body}}
+  {{component model.component model=componentModel}}
 {{/d-modal-body}}
+
+<div class="modal-footer">
+  {{d-button
+    label=(theme-i18n "insert")
+    icon="plus"
+    action=(action "insertTag")
+    class="btn-primary"
+  }}
+  {{d-modal-cancel close=(route-action "closeModal")}}
+</div>
