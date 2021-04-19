@@ -1,0 +1,5 @@
+en:
+  discourse_local_dates:
+    bbcode_autocomplete:
+      name: Date
+      template: '[date=%{date} timezone="%{timezone}"]'
