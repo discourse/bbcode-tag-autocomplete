@@ -8,6 +8,7 @@
     icon="plus"
     action=(action "insertTag")
     class="btn-primary"
+    disabled=(not componentModel.isValid)
   }}
   {{d-modal-cancel close=(route-action "closeModal")}}
 </div>

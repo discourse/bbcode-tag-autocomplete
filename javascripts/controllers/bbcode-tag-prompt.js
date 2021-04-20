@@ -10,7 +10,7 @@ export default Controller.extend(ModalFunctionality, {
   componentModel: null,
 
   onShow() {
-    this.set("componentModel", EmberObject.create({}));
+    this.set("componentModel", EmberObject.create({ isValid: false }));
   },
 
   @action
